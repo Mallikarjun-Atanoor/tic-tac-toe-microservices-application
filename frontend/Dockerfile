@@ -1,14 +1,16 @@
-FROM nginx:alpine
+FROM python:3.11-slim
 
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+WORKDIR /app
 
-COPY . /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-RUN chown -R appuser:appgroup /usr/share/nginx/html
+COPY requirements.txt .
 
-USER appuser
+RUN pip install --no-cache-dir -r requirements.txt
 
-EXPOSE 80
+COPY . .
 
-CMD ["nginx", "-g", "daemon off;"]
+EXPOSE 8000
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

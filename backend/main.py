@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 # ---------------- App ----------------
 app = FastAPI()
+Instrumentator().instrument(app).expose(app)
 
 # ---------------- CORS ----------------
 from fastapi.middleware.cors import CORSMiddleware
@@ -45,11 +46,11 @@ def get_db():
     finally:
         db.close()
 
-# ---------------- Startup ----------------
-@app.on_event("startup")
-async def startup():
-    # Prometheus metrics
-    Instrumentator().instrument(app).expose(app)
+# # ---------------- Startup ----------------
+# @app.on_event("startup")
+# async def startup():
+#     # Prometheus metrics
+#     Instrumentator().instrument(app).expose(app)
 
     # DB initialization (safe)
     try:
