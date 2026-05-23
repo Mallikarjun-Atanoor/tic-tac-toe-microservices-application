@@ -14,10 +14,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy code
 COPY . .
-
 # Fix permissions
 RUN chown -R appuser:appgroup /app
-
 # Switch user
 USER appuser
 
